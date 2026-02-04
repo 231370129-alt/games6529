@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-NEXUS // ADVANCED GAMING HUB</title>
+    <style>
+        :root {
+            --cyan: #00f3ff;
+            --magenta: #ff00ff;
+            --yellow: #f7ff00;
+            --purple: #9d00ff;
+            --orange: #ff6b00;
+            --green: #00ff88;
+            --bg: #05050a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-dark: rgba(0, 0, 0, 0.3);
+            --neon-glow: 0 0 10px currentColor;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%2300f3ff" stroke-width="2"/><circle cx="16" cy="16" r="4" fill="%2300f3ff"/></svg>') 16 16, crosshair;
+        }
+        
+        body, html {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Segoe UI', 'Courier New', monospace, sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 20, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--cyan), var(--magenta));
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--magenta), var(--cyan));
+        }
+
+        /* --- BACKGROUND INTERACTION --- */
+        #bg-canvas {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -2;
+            opacity: 0.7;
+        }
+
+        /* --- MAIN HEADER --- */
+        header {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at 30% 20%, #102030 0%, transparent 70%),
+                        radial-gradient(circle at 70% 80%, #301020 0%, transparent 70%),
+                        var(--bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            width: 100%;
+            top: 50%;
+            opacity: 0.3;
+        }
+
+        .logo {
+            font-size: 5rem;
+            letter-spacing: 20px;
+            margin: 0;
+            background: linear-gradient(to right, var(--cyan), var(--magenta), var(--yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+            position: relative;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-top: 20px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+
+        /* --- STATS BAR --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 20px;
+            background: var(--glass-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--cyan);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- GAMING HUB GRID --- */
+        .hub-container {
+            max-width: 1400px;
+            margin: -50px auto 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .game-card {
+            background: linear-gradient(145deg, rgba(0, 243, 255, 0.05), rgba(255, 0, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            border-color: var(--cyan);
+            background: linear-gradient(145deg, rgba(0, 243, 255, 0.1), rgba(255, 0, 255, 0.1));
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.3),
+                        0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--cyan);
+            text-shadow: var(--neon-glow);
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .game-card p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .game-difficulty {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 3px;
+            background-color: #333;
+        }
+
+        .difficulty-dot.active {
+            background-color: var(--cyan);
+            box-shadow: var(--neon-glow);
+        }
+
+        /* --- GAME VIEWPORT --- */
+        #game-viewport {
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #0a0a15 0%, #000 100%);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .game-header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 30px;
+            background: var(--glass-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        .ui-overlay {
+            display: flex;
+            gap: 30px;
+            font-family: monospace;
+            color: var(--cyan);
+            font-size: 1.5rem;
+        }
+
+        canvas#mainGameCanvas {
+            background: #000;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.3),
+                        inset 0 0 30px rgba(0, 243, 255, 0.1);
+            max-width: 90vw;
+            max-height: 70vh;
+            border-radius: 5px;
+        }
+
+        .controls-info {
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 12px 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            border-color: var(--magenta);
+            color: var(--magenta);
+        }
+
+        .btn-secondary:hover {
+            background: var(--magenta);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            background: linear-gradient(to top, rgba(0, 0, 10, 0.9), transparent);
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            letter-spacing: 10px;
+            background: linear-gradient(to right, var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- MODAL / INSTRUCTIONS --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(10, 10, 30, 0.9), rgba(5, 5, 20, 0.9));
+            border: 1px solid var(--cyan);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--cyan);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--cyan);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1200px) {
+            .logo {
+                font-size: 3.5rem;
+                letter-spacing: 15px;
+            }
+            
+            .hub-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+                letter-spacing: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                letter-spacing: 5px;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .ui-overlay {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+            
+            canvas#mainGameCanvas {
+                width: 95vw;
+                height: 50vh;
+            }
+        }
+
+        /* --- KEYFRAME ANIMATIONS --- */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .glitch {
+            animation: glitch 0.5s infinite;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 243, 255, 0.5);
+            z-index: 999;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <div class="cyber-line"></div>
+        <h1 class="logo">CYBER-NEXUS</h1>
+        <p class="subtitle">SELECT MODULE TO INITIALIZE</p>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value" id="totalGames">0</div>
+                <div class="stat-label">Games Played</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="highScore">0</div>
+                <div class="stat-label">High Score</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="totalTime">00:00</div>
+                <div class="stat-label">Play Time</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="playerLevel">1</div>
+                <div class="stat-label">Security Clearance</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="hub-container" id="hub">
+        <!-- Game 1: Arcade Avoid -->
+        <div class="game-card">
+            <div class="game-icon">⏣</div>
+            <h3>ARCADE // AVOID</h3>
+            <p>Dodge incoming corrupted data fragments in this fast-paced arcade challenge. Survive as long as possible while the speed increases.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('avoid')">Initialize</button>
+        </div>
+        
+        <!-- Game 2: Logic Snake -->
+        <div class="game-card">
+            <div class="game-icon">⟁</div>
+            <h3>LOGIC // SNAKE</h3>
+            <p>Collect neural links to grow your data stream. Avoid collisions with yourself and the boundaries of the simulation.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('snake')">Initialize</button>
+        </div>
+        
+        <!-- Game 3: Reflex Paddle -->
+        <div class="game-card">
+            <div class="game-icon">▢</div>
+            <h3>REFLEX // PADDLE</h3>
+            <p>Quantum bounce simulation against AI. Deflect the energy ball and prevent it from escaping your defensive grid.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('paddle')">Initialize</button>
+        </div>
+        
+        <!-- Game 4: Catch Fragments -->
+        <div class="game-card">
+            <div class="game-icon">◉</div>
+            <h3>CATCH // FRAGMENTS</h3>
+            <p>Collect falling energy cells while avoiding corrupted data packets. Each catch strengthens your firewall.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('catch')">Initialize</button>
+        </div>
+        
+        <!-- Game 5: Survive Pulse -->
+        <div class="game-card">
+            <div class="game-icon">⟰</div>
+            <h3>SURVIVE // PULSE</h3>
+            <p>Stay inside the moving safe-zone as it pulses through the network. Synchronization is key to survival.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+            </div>
+            <button class="btn" onclick="initGame('pulse')">Initialize</button>
+        </div>
+        
+        <!-- Game 6: Memory Sequence -->
+        <div class="game-card">
+            <div class="game-icon">⌗</div>
+            <h3>MEMORY // SEQUENCE</h3>
+            <p>Repeat the flashing pattern of nodes in the correct order. Each level adds more complexity.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('memory')">Initialize</button>
+        </div>
+        
+        <!-- Game 7: Cyber Invaders -->
+        <div class="game-card">
+            <div class="game-icon">▽</div>
+            <h3>CYBER // INVADERS</h3>
+            <p>Defend the nexus from incoming malware invaders. Shoot them down before they breach your system.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('invaders')">Initialize</button>
+        </div>
+        
+        <!-- Game 8: Data Runner -->
+        <div class="game-card">
+            <div class="game-icon">⤳</div>
+            <h3>DATA // RUNNER</h3>
+            <p>Navigate through the data highway, jumping between platforms and collecting encryption keys.</p>
+            <div class="game-difficulty">
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot active"></div>
+                <div class="difficulty-dot"></div>
+                <div class="difficulty-dot"></div>
+            </div>
+            <button class="btn" onclick="initGame('runner')">Initialize</button>
+        </div>
+    </div>
+
+    <section id="game-viewport">
+        <div class="game-header">
+            <div class="game-title" id="currentGameTitle">GAME TITLE</div>
+            <div class="ui-overlay">
+                <div>SCORE: <span id="score">0</span></div>
+                <div>LEVEL: <span id="level">1</span></div>
+                <div>TIME: <span id="time">00:00</span></div>
+                <div>LIVES: <span id="lives">3</span></div>
+            </div>
+        </div>
+        
+        <canvas id="mainGameCanvas"></canvas>
+        
+        <div class="controls-info" id="controlsInfo">
+            Use MOUSE to move | SPACEBAR for action | ESC to pause
+        </div>
+        
+        <div style="margin-top: 30px; display: flex; gap: 20px;">
+            <button class="btn" onclick="pauseGame()">PAUSE</button>
+            <button class="btn" onclick="restartGame()">RESTART</button>
+            <button class="btn btn-secondary" onclick="closeHub()">BACK TO HUB</button>
+        </div>
+    </section>
+
+    <!-- Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h2 class="modal-title" id="modalGameTitle">GAME INSTRUCTIONS</h2>
+            <div class="modal-body" id="modalInstructions">
+                Game instructions will appear here.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">CYBER-NEXUS</div>
+        <div class="copyright">© 2023 CYBER-NEXUS GAMING HUB | ALL SYSTEMS OPERATIONAL</div>
+        <div style="margin-top: 20px;">
+            <button class="btn" style="padding: 8px 20px; font-size: 0.8rem;" onclick="showInstructions()">INSTRUCTIONS</button>
+            <button class="btn btn-secondary" style="padding: 8px 20px; font-size: 0.8rem; margin-left: 10px;" onclick="resetProgress()">RESET PROGRESS</button>
+        </div>
+    </footer>
+
+    <script>
+        // ======================
+        // GLOBAL VARIABLES
+        // ======================
+        const canvas = document.getElementById('mainGameCanvas');
+        const ctx = canvas.getContext('2d');
+        const viewport = document.getElementById('game-viewport');
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+        const timeEl = document.getElementById('time');
+        const livesEl = document.getElementById('lives');
+        const currentGameTitle = document.getElementById('currentGameTitle');
+        const controlsInfo = document.getElementById('controlsInfo');
+        const instructionsModal = document.getElementById('instructionsModal');
+        const modalGameTitle = document.getElementById('modalGameTitle');
+        const modalInstructions = document.getElementById('modalInstructions');
+        
+        // Game state
+        let gameActive = false;
+        let gamePaused = false;
+        let currentGame = '';
+        let score = 0;
+        let level = 1;
+        let lives = 3;
+        let gameTime = 0;
+        let gameTimer;
+        
+        // Player stats (persisted)
+        let totalGames = parseInt(localStorage.getItem('cybernexus_totalGames')) || 0;
+        let highScore = parseInt(localStorage.getItem('cybernexus_highScore')) || 0;
+        let totalPlayTime = parseInt(localStorage.getItem('cybernexus_totalPlayTime')) || 0;
+        let playerLevel = parseInt(localStorage.getItem('cybernexus_playerLevel')) || 1;
+        
+        // Update stats display
+        document.getElementById('totalGames').innerText = totalGames;
+        document.getElementById('highScore').innerText = highScore;
+        document.getElementById('playerLevel').innerText = playerLevel;
+        
+        // Format time for display
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        document.getElementById('totalTime').innerText = formatTime(totalPlayTime);
+        
+        // Canvas setup
+        canvas.width = 1000;
+        canvas.height = 600;
+        
+        // ======================
+        // BACKGROUND EFFECTS
+        // ======================
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        
+        function resizeCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Advanced particles for background
+        class Particle {
+            constructor() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = Math.random() * bgCanvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 243, 255, 0.5)' : 'rgba(255, 0, 255, 0.5)';
+                this.trail = [];
+                this.maxTrail = 5;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Add current position to trail
+                this.trail.push({x: this.x, y: this.y});
+                if (this.trail.length > this.maxTrail) {
+                    this.trail.shift();
+                }
+                
+                // Bounce off edges
+                if (this.x < 0 || this.x > bgCanvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > bgCanvas.height) this.speedY *= -1;
+            }
+            
+            draw() {
+                bgCtx.fillStyle = this.color;
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                bgCtx.fill();
+                
+                // Draw trail
+                for (let i = 0; i < this.trail.length; i++) {
+                    const point = this.trail[i];
+                    const alpha = i / this.trail.length * 0.3;
+                    bgCtx.fillStyle = `rgba(0, 243, 255, ${alpha})`;
+                    bgCtx.beginPath();
+                    bgCtx.arc(point.x, point.y, this.size * (i / this.trail.length), 0, Math.PI * 2);
+                    bgCtx.fill();
+                }
+            }
+        }
+        
+        // Grid for background
+        class GridLine {
+            constructor(isVertical) {
+                this.isVertical = isVertical;
+                this.position = Math.random() * (isVertical ? bgCanvas.width : bgCanvas.height);
+                this.speed = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random() * 0.1 + 0.05;
+            }
+            
+            update() {
+                if (this.isVertical) {
+                    this.position += this.speed;
+                    if (this.position > bgCanvas.width) this.position = 0;
+                } else {
+                    this.position += this.speed;
+                    if (this.position > bgCanvas.height) this.position = 0;
+                }
+            }
+            
+            draw() {
+                bgCtx.strokeStyle = `rgba(0, 243, 255, ${this.opacity})`;
+                bgCtx.lineWidth = 1;
+                
+                if (this.isVertical) {
+                    bgCtx.beginPath();
+                    bgCtx.moveTo(this.position, 0);
+                    bgCtx.lineTo(this.position, bgCanvas.height);
+                    bgCtx.stroke();
+                } else {
+                    bgCtx.beginPath();
+                    bgCtx.moveTo(0, this.position);
+                    bgCtx.lineTo(bgCanvas.width, this.position);
+                    bgCtx.stroke();
+                }
+            }
+        }
+        
+        // Initialize background effects
+        const particles = Array.from({length: 150}, () => new Particle());
+        const gridLines = [
+            ...Array.from({length: 20}, () => new GridLine(true)),
+            ...Array.from({length: 15}, () => new GridLine(false))
+        ];
+        
+        function animateBackground() {
+            // Clear with fade effect
+            bgCtx.fillStyle = 'rgba(5, 5, 10, 0.05)';
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            
+            // Draw grid lines
+            gridLines.forEach(line => {
+                line.update();
+                line.draw();
+            });
+            
+            // Draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            // Draw connection lines between close particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        bgCtx.strokeStyle = `rgba(0, 243, 255, ${0.1 * (1 - distance/100)})`;
+                        bgCtx.lineWidth = 0.5;
+                        bgCtx.beginPath();
+                        bgCtx.moveTo(particles[i].x, particles[i].y);
+                        bgCtx.lineTo(particles[j].x, particles[j].y);
+                        bgCtx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animateBackground);
+        }
+        
+        animateBackground();
+        
+        // ======================
+        // GAME MANAGEMENT
+        // ======================
+        const gameConfigs = {
+            avoid: {
+                title: "ARCADE // AVOID",
+                instructions: "Dodge the incoming corrupted data fragments!<br><br>CONTROLS:<br>- Move mouse left/right to control your defender<br><br>OBJECTIVE:<br>- Survive as long as possible<br>- Each avoided fragment scores 10 points<br>- Game speeds up every 30 seconds<br><br>TIP: Stay near the center for better reaction time.",
+                controls: "Use MOUSE to move defender left and right",
+                player: { x: 400, y: 550, w: 80, h: 15, speed: 10 },
+                entities: [],
+                spawnRate: 0.03,
+                speedMultiplier: 1,
+                lastSpeedIncrease: 0
+            },
+            snake: {
+                title: "LOGIC // SNAKE",
+                instructions: "Collect neural links to grow your data stream!<br><br>CONTROLS:<br>- Arrow Keys or WASD to change direction<br><br>OBJECTIVE:<br>- Collect cyan nodes to grow longer<br- Avoid hitting walls or yourself<br>- Each node collected scores 100 points<br><br>TIP: Plan your route to avoid trapping yourself.",
+                controls: "Use ARROW KEYS or WASD to control snake direction",
+                cells: [],
+                direction: { x: 20, y: 0 },
+                cellSize: 20,
+                apple: { x: 0, y: 0 },
+                growAmount: 0,
+                moveCounter: 0,
+                moveDelay: 10
+            },
+            paddle: {
+                title: "REFLEX // PADDLE",
+                instructions: "Deflect the energy ball with your paddle!<br><br>CONTROLS:<br>- Move mouse left/right to control paddle<br><br>OBJECTIVE:<br>- Bounce the ball with your paddle<br>- Don't let it pass your paddle<br>- Each bounce scores 5 points<br>- Break all bricks to advance levels<br><br>TIP: Angle your shots to hit bricks at the edges.",
+                controls: "Use MOUSE to move paddle left and right",
+                player: { x: 400, y: 580, w: 120, h: 15, speed: 12 },
+                ball: { x: 400, y: 300, vx: 5, vy: 5, radius: 8 },
+                bricks: [],
+                brickRows: 5,
+                brickCols: 10
+            },
+            catch: {
+                title: "CATCH // FRAGMENTS",
+                instructions: "Collect falling energy cells!<br><br>CONTROLS:<br>- Move mouse left/right to control collector<br><br>OBJECTIVE:<br>- Catch cyan energy cells (+10 points)<br>- Avoid magenta corrupted data (-1 life)<br>- Game speeds up every 45 seconds<br><br>TIP: Focus on catching clusters for maximum points.",
+                controls: "Use MOUSE to move collector left and right",
+                player: { x: 400, y: 550, w: 100, h: 20 },
+                entities: [],
+                spawnRate: 0.04,
+                speedMultiplier: 1
+            },
+            pulse: {
+                title: "SURVIVE // PULSE",
+                instructions: "Stay inside the moving safe-zone!<br><br>CONTROLS:<br>- Move mouse to control your position<br><br>OBJECTIVE:<br>- Keep your cursor inside the safe zone<br>- Zone changes size and speed each level<br>- Each second inside scores 1 point<br><br>TIP: Anticipate the zone's movement pattern.",
+                controls: "Use MOUSE to stay inside the safe zone",
+                zone: { x: 400, y: 300, width: 150, height: 150, vx: 2, vy: 1 },
+                player: { x: 400, y: 300, radius: 10 },
+                pulseSize: 0,
+                pulseDirection: 1
+            },
+            memory: {
+                title: "MEMORY // SEQUENCE",
+                instructions: "Repeat the flashing pattern!<br><br>CONTROLS:<br>- Click nodes in the correct order<br><br>OBJECTIVE:<br>- Watch the sequence of flashing nodes<br>- Repeat the sequence by clicking nodes<br>- Each correct sequence advances level<br><br>TIP: Create a mental pattern or rhythm.",
+                controls: "CLICK nodes in the correct sequence",
+                sequence: [],
+                playerSequence: [],
+                nodes: [],
+                showingSequence: false,
+                sequenceIndex: 0,
+                nodeCount: 4
+            },
+            invaders: {
+                title: "CYBER // INVADERS",
+                instructions: "Defend against malware invaders!<br><br>CONTROLS:<br>- Move mouse left/right to aim<br>- Click or SPACE to fire<br><br>OBJECTIVE:<br>- Shoot down incoming invaders<br>- Don't let them reach the bottom<br>- Each invader destroyed scores 25 points<br><br>TIP: Shoot invaders at the edges first.",
+                controls: "Use MOUSE to aim, CLICK or SPACE to fire",
+                player: { x: 400, y: 580, w: 80, h: 20 },
+                bullets: [],
+                invaders: [],
+                invaderRows: 5,
+                invaderCols: 10,
+                lastShot: 0,
+                shotDelay: 300
+            },
+            runner: {
+                title: "DATA // RUNNER",
+                instructions: "Navigate the data highway!<br><br>CONTROLS:<br>- SPACE or CLICK to jump<br><br>OBJECTIVE:<br>- Jump between platforms<br>- Collect encryption keys (+50 points)<br>- Avoid falling into the void<br>- Game speeds up gradually<br><br>TIP: Time your jumps carefully.",
+                controls: "SPACE or CLICK to jump between platforms",
+                player: { x: 100, y: 400, width: 30, height: 50, velocityY: 0, onGround: false },
+                platforms: [],
+                keys: [],
+                scrollY: 0,
+                gravity: 0.5,
+                jumpForce: -12
+            }
+        };
+        
+        // Input handling
+        let mouseX = 400;
+        let mouseY = 300;
+        let keys = {};
+        
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+        
+        canvas.addEventListener('click', (e) => {
+            if (currentGame === 'memory' && !gameConfigs.memory.showingSequence) {
+                handleMemoryClick(mouseX, mouseY);
+            }
+            if (currentGame === 'invaders') {
+                fireBullet();
+            }
+            if (currentGame === 'runner') {
+                jump();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            if (e.key === 'Escape') {
+                pauseGame();
+            }
+            
+            if (e.key === ' ' && currentGame === 'invaders') {
+                fireBullet();
+            }
+            
+            if (e.key === ' ' && currentGame === 'runner') {
+                jump();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+        
+        // ======================
+        // GAME INITIALIZATION
+        // ======================
+        function initGame(type) {
+            // Update stats
+            totalGames++;
+            localStorage.setItem('cybernexus_totalGames', totalGames);
+            document.getElementById('totalGames').innerText = totalGames;
+            
+            // Show game view
+            document.getElementById('hub').style.display = 'none';
+            viewport.style.display = 'flex';
+            currentGame = type;
+            gameActive = true;
+            gamePaused = false;
+            score = 0;
+            level = 1;
+            lives = 3;
+            gameTime = 0;
+            
+            // Update UI
+            scoreEl.innerText = score;
+            levelEl.innerText = level;
+            livesEl.innerText = lives;
+            currentGameTitle.innerText = gameConfigs[type].title;
+            controlsInfo.innerText = gameConfigs[type].controls;
+            
+            // Initialize specific game
+            switch(type) {
+                case 'avoid':
+                    initAvoidGame();
+                    break;
+                case 'snake':
+                    initSnakeGame();
+                    break;
+                case 'paddle':
+                    initPaddleGame();
+                    break;
+                case 'catch':
+                    initCatchGame();
+                    break;
+                case 'pulse':
+                    initPulseGame();
+                    break;
+                case 'memory':
+                    initMemoryGame();
+                    break;
+                case 'invaders':
+                    initInvadersGame();
+                    break;
+                case 'runner':
+                    initRunnerGame();
+                    break;
+            }
+            
+            // Start game timer
+            clearInterval(gameTimer);
+            gameTimer = setInterval(() => {
+                if (gameActive && !gamePaused) {
+                    gameTime++;
+                    timeEl.innerText = formatTime(gameTime);
+                    totalPlayTime++;
+                    localStorage.setItem('cybernexus_totalPlayTime', totalPlayTime);
+                    document.getElementById('totalTime').innerText = formatTime(totalPlayTime);
+                }
+            }, 1000);
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function initAvoidGame() {
+            const config = gameConfigs.avoid;
+            config.player = { x: 400, y: 550, w: 80, h: 15, speed: 10 };
+            config.entities = [];
+            config.spawnRate = 0.03;
+            config.speedMultiplier = 1;
+            config.lastSpeedIncrease = 0;
+        }
+        
+        function initSnakeGame() {
+            const config = gameConfigs.snake;
+            config.cells = [{x: 400, y: 300}];
+            config.direction = { x: 20, y: 0 };
+            config.cellSize = 20;
+            config.apple = { x: Math.floor(Math.random() * (canvas.width/20)) * 20, 
+                            y: Math.floor(Math.random() * (canvas.height/20)) * 20 };
+            config.growAmount = 0;
+            config.moveCounter = 0;
+            config.moveDelay = 10;
+            
+            // Set initial snake length
+            for (let i = 1; i < 4; i++) {
+                config.cells.push({x: 400 - i * 20, y: 300});
+            }
+        }
+        
+        function initPaddleGame() {
+            const config = gameConfigs.paddle;
+            config.player = { x: 400, y: 580, w: 120, h: 15, speed: 12 };
+            config.ball = { x: 400, y: 300, vx: 5, vy: 5, radius: 8 };
+            config.bricks = [];
+            
+            // Create bricks
+            const brickWidth = 80;
+            const brickHeight = 20;
+            const brickPadding = 5;
+            const brickOffsetTop = 60;
+            const brickOffsetLeft = 50;
+            
+            for (let r = 0; r < config.brickRows; r++) {
+                for (let c = 0; c < config.brickCols; c++) {
+                    const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                    const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                    config.bricks.push({
+                        x: brickX,
+                        y: brickY,
+                        width: brickWidth,
+                        height: brickHeight,
+                        color: `hsl(${r * 40}, 100%, 60%)`,
+                        active: true
+                    });
+                }
+            }
+        }
+        
+        function initCatchGame() {
+            const config = gameConfigs.catch;
+            config.player = { x: 400, y: 550, w: 100, h: 20 };
+            config.entities = [];
+            config.spawnRate = 0.04;
+            config.speedMultiplier = 1;
+        }
+        
+        function initPulseGame() {
+            const config = gameConfigs.pulse;
+            config.zone = { x: 400, y: 300, width: 150, height: 150, vx: 2, vy: 1 };
+            config.player = { x: 400, y: 300, radius: 10 };
+            config.pulseSize = 0;
+            config.pulseDirection = 1;
+        }
+        
+        function initMemoryGame() {
+            const config = gameConfigs.memory;
+            config.sequence = [];
+            config.playerSequence = [];
+            config.nodes = [];
+            config.showingSequence = false;
+            config.sequenceIndex = 0;
+            config.nodeCount = 4;
+            
+            // Create nodes in a circle
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 150;
+            
+            for (let i = 0; i < config.nodeCount; i++) {
+                const angle = (i / config.nodeCount) * Math.PI * 2;
+                config.nodes.push({
+                    x: centerX + Math.cos(angle) * radius,
+                    y: centerY + Math.sin(angle) * radius,
+                    radius: 40,
+                    color: '#333',
+                    active: false,
+                    index: i
+                });
+            }
+            
+            // Start first sequence
+            addToSequence();
+            showSequence();
+        }
+        
+        function initInvadersGame() {
+            const config = gameConfigs.invaders;
+            config.player = { x: 400, y: 580, w: 80, h: 20 };
+            config.bullets = [];
+            config.invaders = [];
+            config.lastShot = 0;
+            config.shotDelay = 300;
+            
+            // Create invaders grid
+            const invaderWidth = 40;
+            const invaderHeight = 30;
+            const invaderPadding = 10;
+            const invaderOffsetTop = 50;
+            const invaderOffsetLeft = 50;
+            
+            for (let r = 0; r < config.invaderRows; r++) {
+                for (let c = 0; c < config.invaderCols; c++) {
+                    const invaderX = c * (invaderWidth + invaderPadding) + invaderOffsetLeft;
+                    const invaderY = r * (invaderHeight + invaderPadding) + invaderOffsetTop;
+                    config.invaders.push({
+                        x: invaderX,
+                        y: invaderY,
+                        width: invaderWidth,
+                        height: invaderHeight,
+                        color: `hsl(${r * 30}, 100%, 60%)`,
+                        alive: true,
+                        direction: 1
+                    });
+                }
+            }
+        }
+        
+        function initRunnerGame() {
+            const config = gameConfigs.runner;
+            config.player = { x: 100, y: 400, width: 30, height: 50, velocityY: 0, onGround: false };
+            config.platforms = [];
+            config.keys = [];
+            config.scrollY = 0;
+            config.gravity = 0.5;
+            config.jumpForce = -12;
+            
+            // Create initial platforms
+            for (let i = 0; i < 10; i++) {
+                config.platforms.push({
+                    x: Math.random() * (canvas.width - 100),
+                    y: i * 100,
+                    width: 80 + Math.random() * 70,
+                    height: 20,
+                    color: `hsl(${i * 30}, 70%, 50%)`
+                });
+            }
+            
+            // Create some keys
+            for (let i = 0; i < 5; i++) {
+                config.keys.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: i * 150 + 50,
+                    collected: false
+                });
+            }
+        }
+        
+        // ======================
+        // GAME LOOP
+        // ======================
+        function gameLoop() {
+            if (!gameActive || gamePaused) return;
+            
+            // Clear canvas with fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid background
+            drawGrid();
+            
+            // Run current game
+            switch(currentGame) {
+                case 'avoid':
+                    runAvoidGame();
+                    break;
+                case 'snake':
+                    runSnakeGame();
+                    break;
+                case 'paddle':
+                    runPaddleGame();
+                    break;
+                case 'catch':
+                    runCatchGame();
+                    break;
+                case 'pulse':
+                    runPulseGame();
+                    break;
+                case 'memory':
+                    runMemoryGame();
+                    break;
+                case 'invaders':
+                    runInvadersGame();
+                    break;
+                case 'runner':
+                    runRunnerGame();
+                    break;
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // ======================
+        // INDIVIDUAL GAME LOGIC
+        // ======================
+        
+        // 1. AVOID GAME
+        function runAvoidGame() {
+            const config = gameConfigs.avoid;
+            
+            // Update player based on mouse
+            config.player.x = mouseX - config.player.w / 2;
+            
+            // Speed increases over time
+            if (gameTime - config.lastSpeedIncrease > 30) {
+                config.speedMultiplier += 0.2;
+                config.lastSpeedIncrease = gameTime;
+                level++;
+                levelEl.innerText = level;
+            }
+            
+            // Spawn new entities
+            if (Math.random() < config.spawnRate * config.speedMultiplier) {
+                config.entities.push({
+                    x: Math.random() * (canvas.width - 40),
+                    y: -40,
+                    speed: 3 + Math.random() * 4 * config.speedMultiplier,
+                    width: 20 + Math.random() * 20,
+                    height: 20 + Math.random() * 20,
+                    color: `hsl(${Math.random() * 60 + 300}, 100%, 60%)`
+                });
+            }
+            
+            // Draw player
+            ctx.fillStyle = '#00f3ff';
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            
+            // Draw glow effect
+            ctx.shadowColor = '#00f3ff';
+            ctx.shadowBlur = 20;
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            ctx.shadowBlur = 0;
+            
+            // Update and draw entities
+            for (let i = config.entities.length - 1; i >= 0; i--) {
+                const entity = config.entities[i];
+                entity.y += entity.speed;
+                
+                // Draw entity with glow
+                ctx.fillStyle = entity.color;
+                ctx.shadowColor = entity.color;
+                ctx.shadowBlur = 15;
+                ctx.fillRect(entity.x, entity.y, entity.width, entity.height);
+                ctx.shadowBlur = 0;
+                
+                // Check collision
+                if (entity.y + entity.height > config.player.y &&
+                    entity.y < config.player.y + config.player.h &&
+                    entity.x + entity.width > config.player.x &&
+                    entity.x < config.player.x + config.player.w) {
+                    
+                    // Collision detected
+                    lives--;
+                    livesEl.innerText = lives;
+                    
+                    if (lives <= 0) {
+                        gameOver();
+                        return;
+                    }
+                    
+                    // Remove entity on hit
+                    config.entities.splice(i, 1);
+                    continue;
+                }
+                
+                // Remove if off screen
+                if (entity.y > canvas.height) {
+                    config.entities.splice(i, 1);
+                    score += 10;
+                    scoreEl.innerText = score;
+                }
+            }
+            
+            // Draw score multiplier
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            ctx.fillText(`SPEED: x${config.speedMultiplier.toFixed(1)}`, 20, 30);
+        }
+        
+        // 2. SNAKE GAME
+        function runSnakeGame() {
+            const config = gameConfigs.snake;
+            
+            // Handle input
+            if (keys['arrowup'] || keys['w']) {
+                if (config.direction.y === 0) {
+                    config.direction = { x: 0, y: -config.cellSize };
+                }
+            } else if (keys['arrowdown'] || keys['s']) {
+                if (config.direction.y === 0) {
+                    config.direction = { x: 0, y: config.cellSize };
+                }
+            } else if (keys['arrowleft'] || keys['a']) {
+                if (config.direction.x === 0) {
+                    config.direction = { x: -config.cellSize, y: 0 };
+                }
+            } else if (keys['arrowright'] || keys['d']) {
+                if (config.direction.x === 0) {
+                    config.direction = { x: config.cellSize, y: 0 };
+                }
+            }
+            
+            // Move snake at appropriate speed
+            config.moveCounter++;
+            if (config.moveCounter < config.moveDelay) return;
+            config.moveCounter = 0;
+            
+            // Calculate new head position
+            const head = { ...config.cells[0] };
+            head.x += config.direction.x;
+            head.y += config.direction.y;
+            
+            // Check wall collisions
+            if (head.x < 0 || head.x >= canvas.width || 
+                head.y < 0 || head.y >= canvas.height) {
+                gameOver();
+                return;
+            }
+            
+            // Check self collision
+            for (let i = 0; i < config.cells.length; i++) {
+                if (head.x === config.cells[i].x && head.y === config.cells[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Add new head
+            config.cells.unshift(head);
+            
+            // Check apple collision
+            if (head.x === config.apple.x && head.y === config.apple.y) {
+                score += 100;
+                scoreEl.innerText = score;
+                
+                // Generate new apple (not on snake)
+                let newApple;
+                let onSnake;
+                do {
+                    newApple = {
+                        x: Math.floor(Math.random() * (canvas.width/config.cellSize)) * config.cellSize,
+                        y: Math.floor(Math.random() * (canvas.height/config.cellSize)) * config.cellSize
+                    };
+                    
+                    onSnake = false;
+                    for (const cell of config.cells) {
+                        if (cell.x === newApple.x && cell.y === newApple.y) {
+                            onSnake = true;
+                            break;
+                        }
+                    }
+                } while (onSnake);
+                
+                config.apple = newApple;
+                
+                // Increase speed every 5 apples
+                if (score % 500 === 0) {
+                    config.moveDelay = Math.max(3, config.moveDelay - 1);
+                    level++;
+                    levelEl.innerText = level;
+                }
+                
+                // Don't remove tail (snake grows)
+                config.growAmount += 3;
+            } else if (config.growAmount > 0) {
+                // Still growing
+                config.growAmount--;
+            } else {
+                // Remove tail
+                config.cells.pop();
+            }
+            
+            // Draw everything
+            // Draw apple
+            ctx.fillStyle = '#ff0066';
+            ctx.beginPath();
+            ctx.arc(config.apple.x + config.cellSize/2, config.apple.y + config.cellSize/2, config.cellSize/2, 0, Math.PI*2);
+            ctx.fill();
+            
+            // Draw snake
+            for (let i = 0; i < config.cells.length; i++) {
+                const cell = config.cells[i];
+                
+                // Head is different color
+                if (i === 0) {
+                    ctx.fillStyle = '#00ff88';
+                } else {
+                    // Gradient from head to tail
+                    const intensity = 1 - (i / config.cells.length) * 0.7;
+                    ctx.fillStyle = `rgb(0, ${Math.floor(255 * intensity)}, ${Math.floor(150 * intensity)})`;
+                }
+                
+                ctx.fillRect(cell.x, cell.y, config.cellSize, config.cellSize);
+                
+                // Add inner detail
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fillRect(cell.x + 3, cell.y + 3, config.cellSize - 6, config.cellSize - 6);
+            }
+            
+            // Draw score
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            ctx.fillText(`LENGTH: ${config.cells.length}`, 20, 30);
+        }
+        
+        // 3. PADDLE GAME (BREAKOUT)
+        function runPaddleGame() {
+            const config = gameConfigs.paddle;
+            
+            // Update player
+            config.player.x = mouseX - config.player.w / 2;
+            config.player.x = Math.max(0, Math.min(canvas.width - config.player.w, config.player.x));
+            
+            // Update ball
+            config.ball.x += config.ball.vx;
+            config.ball.y += config.ball.vy;
+            
+            // Ball wall collision
+            if (config.ball.x - config.ball.radius < 0 || 
+                config.ball.x + config.ball.radius > canvas.width) {
+                config.ball.vx *= -1;
+            }
+            if (config.ball.y - config.ball.radius < 0) {
+                config.ball.vy *= -1;
+            }
+            
+            // Ball paddle collision
+            if (config.ball.y + config.ball.radius > config.player.y &&
+                config.ball.y - config.ball.radius < config.player.y + config.player.h &&
+                config.ball.x + config.ball.radius > config.player.x &&
+                config.ball.x - config.ball.radius < config.player.x + config.player.w) {
+                
+                // Calculate bounce angle based on where ball hits paddle
+                const hitPos = (config.ball.x - config.player.x) / config.player.w;
+                const angle = hitPos * Math.PI - Math.PI / 2;
+                const speed = Math.sqrt(config.ball.vx * config.ball.vx + config.ball.vy * config.ball.vy);
+                
+                config.ball.vx = speed * Math.cos(angle);
+                config.ball.vy = speed * Math.sin(angle);
+                
+                // Ensure minimum vertical speed
+                if (Math.abs(config.ball.vy) < 3) {
+                    config.ball.vy = config.ball.vy < 0 ? -3 : 3;
+                }
+                
+                score += 5;
+                scoreEl.innerText = score;
+            }
+            
+            // Ball brick collision
+            for (let i = config.bricks.length - 1; i >= 0; i--) {
+                const brick = config.bricks[i];
+                
+                if (!brick.active) continue;
+                
+                // Check collision
+                if (config.ball.x + config.ball.radius > brick.x &&
+                    config.ball.x - config.ball.radius < brick.x + brick.width &&
+                    config.ball.y + config.ball.radius > brick.y &&
+                    config.ball.y - config.ball.radius < brick.y + brick.height) {
+                    
+                    // Determine side of collision
+                    const dx1 = Math.abs(config.ball.x - brick.x);
+                    const dx2 = Math.abs(config.ball.x - (brick.x + brick.width));
+                    const dy1 = Math.abs(config.ball.y - brick.y);
+                    const dy2 = Math.abs(config.ball.y - (brick.y + brick.height));
+                    
+                    const minX = Math.min(dx1, dx2);
+                    const minY = Math.min(dy1, dy2);
+                    
+                    if (minX < minY) {
+                        config.ball.vx *= -1;
+                    } else {
+                        config.ball.vy *= -1;
+                    }
+                    
+                    brick.active = false;
+                    score += 50;
+                    scoreEl.innerText = score;
+                    
+                    // Check if all bricks are destroyed
+                    const activeBricks = config.bricks.filter(b => b.active);
+                    if (activeBricks.length === 0) {
+                        levelUp();
+                        return;
+                    }
+                    
+                    break;
+                }
+            }
+            
+            // Ball out of bounds
+            if (config.ball.y > canvas.height) {
+                lives--;
+                livesEl.innerText = lives;
+                
+                if (lives <= 0) {
+                    gameOver();
+                    return;
+                }
+                
+                // Reset ball
+                config.ball.x = canvas.width / 2;
+                config.ball.y = canvas.height / 2;
+                config.ball.vx = 5;
+                config.ball.vy = 5;
+            }
+            
+            // Draw everything
+            // Draw bricks
+            for (const brick of config.bricks) {
+                if (!brick.active) continue;
+                
+                ctx.fillStyle = brick.color;
+                ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+                
+                // Brick highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.fillRect(brick.x + 2, brick.y + 2, brick.width - 4, 5);
+            }
+            
+            // Draw paddle
+            ctx.fillStyle = '#00f3ff';
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            
+            // Draw ball
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(config.ball.x, config.ball.y, config.ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw remaining bricks count
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            const remaining = config.bricks.filter(b => b.active).length;
+            ctx.fillText(`BRICKS: ${remaining}/${config.bricks.length}`, 20, 30);
+        }
+        
+        // 4. CATCH GAME
+        function runCatchGame() {
+            const config = gameConfigs.catch;
+            
+            // Update player
+            config.player.x = mouseX - config.player.w / 2;
+            
+            // Speed increases over time
+            if (gameTime % 45 === 0 && gameTime > 0) {
+                config.speedMultiplier += 0.2;
+                level++;
+                levelEl.innerText = level;
+            }
+            
+            // Spawn entities
+            if (Math.random() < config.spawnRate * config.speedMultiplier) {
+                const isGood = Math.random() > 0.3; // 70% good, 30% bad
+                config.entities.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: -30,
+                    speed: 2 + Math.random() * 3 * config.speedMultiplier,
+                    radius: 10 + Math.random() * 10,
+                    isGood: isGood,
+                    color: isGood ? '#00f3ff' : '#ff00ff'
+                });
+            }
+            
+            // Draw player
+            ctx.fillStyle = '#f7ff00';
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            
+            // Draw glow
+            ctx.shadowColor = '#f7ff00';
+            ctx.shadowBlur = 20;
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            ctx.shadowBlur = 0;
+            
+            // Update and draw entities
+            for (let i = config.entities.length - 1; i >= 0; i--) {
+                const entity = config.entities[i];
+                entity.y += entity.speed;
+                
+                // Draw entity
+                ctx.fillStyle = entity.color;
+                ctx.shadowColor = entity.color;
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(entity.x, entity.y, entity.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Check collision
+                if (entity.y + entity.radius > config.player.y &&
+                    entity.y - entity.radius < config.player.y + config.player.h &&
+                    entity.x + entity.radius > config.player.x &&
+                    entity.x - entity.radius < config.player.x + config.player.w) {
+                    
+                    if (entity.isGood) {
+                        // Good item caught
+                        score += 10;
+                        scoreEl.innerText = score;
+                    } else {
+                        // Bad item caught
+                        lives--;
+                        livesEl.innerText = lives;
+                        
+                        if (lives <= 0) {
+                            gameOver();
+                            return;
+                        }
+                    }
+                    
+                    config.entities.splice(i, 1);
+                    continue;
+                }
+                
+                // Remove if off screen
+                if (entity.y > canvas.height + 50) {
+                    config.entities.splice(i, 1);
+                }
+            }
+            
+            // Draw multiplier
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            ctx.fillText(`SPEED: x${config.speedMultiplier.toFixed(1)}`, 20, 30);
+        }
+        
+        // 5. PULSE GAME
+        function runPulseGame() {
+            const config = gameConfigs.pulse;
+            
+            // Update player position
+            config.player.x = mouseX;
+            config.player.y = mouseY;
+            
+            // Update zone position
+            config.zone.x += config.zone.vx;
+            config.zone.y += config.zone.vy;
+            
+            // Bounce zone off edges
+            if (config.zone.x < 0 || config.zone.x + config.zone.width > canvas.width) {
+                config.zone.vx *= -1;
+            }
+            if (config.zone.y < 0 || config.zone.y + config.zone.height > canvas.height) {
+                config.zone.vy *= -1;
+            }
+            
+            // Pulse effect
+            config.pulseSize += 0.5 * config.pulseDirection;
+            if (config.pulseSize > 10 || config.pulseSize < 0) {
+                config.pulseDirection *= -1;
+            }
+            
+            // Check if player is in zone
+            const inZone = 
+                config.player.x > config.zone.x &&
+                config.player.x < config.zone.x + config.zone.width &&
+                config.player.y > config.zone.y &&
+                config.player.y < config.zone.y + config.zone.height;
+            
+            if (inZone) {
+                // Score increases while in zone
+                score++;
+                scoreEl.innerText = score;
+                
+                // Level up every 30 seconds
+                if (gameTime > 0 && gameTime % 30 === 0) {
+                    levelUp();
+                }
+            } else {
+                // Outside zone - lose life
+                lives--;
+                livesEl.innerText = lives;
+                
+                if (lives <= 0) {
+                    gameOver();
+                    return;
+                }
+                
+                // Reset player to center
+                config.player.x = canvas.width / 2;
+                config.player.y = canvas.height / 2;
+            }
+            
+            // Draw zone with pulse effect
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 3 + config.pulseSize;
+            ctx.strokeRect(
+                config.zone.x - config.pulseSize/2, 
+                config.zone.y - config.pulseSize/2, 
+                config.zone.width + config.pulseSize, 
+                config.zone.height + config.pulseSize
+            );
+            
+            // Fill zone with transparency
+            ctx.fillStyle = 'rgba(0, 243, 255, 0.1)';
+            ctx.fillRect(config.zone.x, config.zone.y, config.zone.width, config.zone.height);
+            
+            // Draw player
+            ctx.fillStyle = inZone ? '#00ff88' : '#ff0066';
+            ctx.beginPath();
+            ctx.arc(config.player.x, config.player.y, config.player.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw connection line if in zone
+            if (inZone) {
+                ctx.strokeStyle = 'rgba(0, 255, 136, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(config.player.x, config.player.y);
+                ctx.lineTo(config.zone.x + config.zone.width/2, config.zone.y + config.zone.height/2);
+                ctx.stroke();
+            }
+            
+            // Draw sync status
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            ctx.fillText(`SYNC: ${inZone ? 'ACTIVE' : 'LOST'}`, 20, 30);
+        }
+        
+        // 6. MEMORY GAME
+        function runMemoryGame() {
+            const config = gameConfigs.memory;
+            
+            // Draw nodes
+            for (const node of config.nodes) {
+                // Node background
+                ctx.fillStyle = node.color;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Node highlight if active
+                if (node.active) {
+                    ctx.fillStyle = '#00f3ff';
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.radius * 0.7, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Node number
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(node.index + 1, node.x, node.y);
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'alphabetic';
+            }
+            
+            // Draw instructions
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            if (config.showingSequence) {
+                ctx.fillText('WATCH THE SEQUENCE...', canvas.width/2 - 100, 50);
+            } else {
+                ctx.fillText('REPEAT THE SEQUENCE', canvas.width/2 - 100, 50);
+                ctx.fillText(`LENGTH: ${config.sequence.length}`, canvas.width/2 - 100, 80);
+            }
+        }
+        
+        function handleMemoryClick(x, y) {
+            const config = gameConfigs.memory;
+            
+            // Find clicked node
+            for (const node of config.nodes) {
+                const dx = x - node.x;
+                const dy = y - node.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < node.radius) {
+                    // Highlight node
+                    node.active = true;
+                    setTimeout(() => { node.active = false; }, 300);
+                    
+                    // Add to player sequence
+                    config.playerSequence.push(node.index);
+                    
+                    // Check if correct
+                    const expected = config.sequence[config.playerSequence.length - 1];
+                    if (node.index !== expected) {
+                        // Wrong sequence
+                        gameOver();
+                        return;
+                    }
+                    
+                    // Check if sequence complete
+                    if (config.playerSequence.length === config.sequence.length) {
+                        // Correct sequence
+                        score += config.sequence.length * 100;
+                        scoreEl.innerText = score;
+                        level++;
+                        levelEl.innerText = level;
+                        
+                        // Reset for next round
+                        config.playerSequence = [];
+                        
+                        // Add to sequence and show
+                        setTimeout(() => {
+                            addToSequence();
+                            showSequence();
+                        }, 1000);
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        
+        function addToSequence() {
+            const config = gameConfigs.memory;
+            const nextNode = Math.floor(Math.random() * config.nodeCount);
+            config.sequence.push(nextNode);
+        }
+        
+        function showSequence() {
+            const config = gameConfigs.memory;
+            config.showingSequence = true;
+            config.sequenceIndex = 0;
+            
+            const showNext = () => {
+                if (config.sequenceIndex >= config.sequence.length) {
+                    config.showingSequence = false;
+                    return;
+                }
+                
+                const nodeIndex = config.sequence[config.sequenceIndex];
+                config.nodes[nodeIndex].active = true;
+                
+                setTimeout(() => {
+                    config.nodes[nodeIndex].active = false;
+                    config.sequenceIndex++;
+                    setTimeout(showNext, 300);
+                }, 500);
+            };
+            
+            showNext();
+        }
+        
+        // 7. INVADERS GAME
+        function runInvadersGame() {
+            const config = gameConfigs.invaders;
+            
+            // Update player
+            config.player.x = mouseX - config.player.w / 2;
+            config.player.x = Math.max(0, Math.min(canvas.width - config.player.w, config.player.x));
+            
+            // Update bullets
+            for (let i = config.bullets.length - 1; i >= 0; i--) {
+                const bullet = config.bullets[i];
+                bullet.y += bullet.vy;
+                
+                // Remove if off screen
+                if (bullet.y < 0) {
+                    config.bullets.splice(i, 1);
+                    continue;
+                }
+                
+                // Check collision with invaders
+                for (let j = config.invaders.length - 1; j >= 0; j--) {
+                    const invader = config.invaders[j];
+                    
+                    if (!invader.alive) continue;
+                    
+                    if (bullet.x > invader.x &&
+                        bullet.x < invader.x + invader.width &&
+                        bullet.y > invader.y &&
+                        bullet.y < invader.y + invader.height) {
+                        
+                        // Hit!
+                        invader.alive = false;
+                        config.bullets.splice(i, 1);
+                        score += 25;
+                        scoreEl.innerText = score;
+                        
+                        // Check if all invaders destroyed
+                        const aliveInvaders = config.invaders.filter(inv => inv.alive);
+                        if (aliveInvaders.length === 0) {
+                            levelUp();
+                            return;
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+            
+            // Update invaders
+            let changeDirection = false;
+            for (const invader of config.invaders) {
+                if (!invader.alive) continue;
+                
+                invader.x += invader.direction * (1 + level * 0.2);
+                
+                // Check if any invader hits edge
+                if (invader.x < 0 || invader.x + invader.width > canvas.width) {
+                    changeDirection = true;
+                }
+                
+                // Check if invader reached bottom
+                if (invader.y + invader.height > config.player.y) {
+                    lives = 0;
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Change direction if needed
+            if (changeDirection) {
+                for (const invader of config.invaders) {
+                    invader.direction *= -1;
+                    invader.y += 20; // Move down
+                }
+            }
+            
+            // Invaders occasionally shoot (simple version)
+            if (Math.random() < 0.01 && config.invaders.filter(inv => inv.alive).length > 0) {
+                const aliveInvaders = config.invaders.filter(inv => inv.alive);
+                const shooter = aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+                
+                config.bullets.push({
+                    x: shooter.x + shooter.width / 2,
+                    y: shooter.y + shooter.height,
+                    vy: 5,
+                    radius: 3,
+                    color: '#ff0066'
+                });
+            }
+            
+            // Draw everything
+            // Draw player
+            ctx.fillStyle = '#00f3ff';
+            ctx.fillRect(config.player.x, config.player.y, config.player.w, config.player.h);
+            
+            // Draw bullets
+            for (const bullet of config.bullets) {
+                ctx.fillStyle = bullet.color || '#ffff00';
+                ctx.beginPath();
+                ctx.arc(bullet.x, bullet.y, bullet.radius || 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Draw invaders
+            for (const invader of config.invaders) {
+                if (!invader.alive) continue;
+                
+                ctx.fillStyle = invader.color;
+                ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
+                
+                // Invader details
+                ctx.fillStyle = '#000';
+                ctx.fillRect(invader.x + 5, invader.y + 5, invader.width - 10, 5);
+                ctx.fillRect(invader.x + 10, invader.y + 15, invader.width - 20, 5);
+            }
+            
+            // Draw remaining invaders
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            const remaining = config.invaders.filter(inv => inv.alive).length;
+            ctx.fillText(`INVADERS: ${remaining}`, 20, 30);
+        }
+        
+        function fireBullet() {
+            const config = gameConfigs.invaders;
+            const now = Date.now();
+            
+            if (now - config.lastShot < config.shotDelay) return;
+            
+            config.lastShot = now;
+            config.bullets.push({
+                x: config.player.x + config.player.w / 2,
+                y: config.player.y,
+                vy: -8,
+                radius: 4,
+                color: '#00ff88'
+            });
+        }
+        
+        // 8. RUNNER GAME
+        function runRunnerGame() {
+            const config = gameConfigs.runner;
+            
+            // Apply gravity
+            config.player.velocityY += config.gravity;
+            config.player.y += config.player.velocityY;
+            
+            // Check ground collision
+            config.player.onGround = false;
+            for (const platform of config.platforms) {
+                if (config.player.x < platform.x + platform.width &&
+                    config.player.x + config.player.width > platform.x &&
+                    config.player.y + config.player.height > platform.y &&
+                    config.player.y + config.player.height < platform.y + 20 &&
+                    config.player.velocityY > 0) {
+                    
+                    config.player.y = platform.y - config.player.height;
+                    config.player.velocityY = 0;
+                    config.player.onGround = true;
+                    break;
+                }
+            }
+            
+            // Check key collection
+            for (const key of config.keys) {
+                if (key.collected) continue;
+                
+                if (config.player.x < key.x + 20 &&
+                    config.player.x + config.player.width > key.x &&
+                    config.player.y < key.y + 20 &&
+                    config.player.y + config.player.height > key.y) {
+                    
+                    key.collected = true;
+                    score += 50;
+                    scoreEl.innerText = score;
+                }
+            }
+            
+            // Scroll screen up as player rises
+            if (config.player.y < canvas.height / 3) {
+                const scrollAmount = canvas.height / 3 - config.player.y;
+                config.player.y = canvas.height / 3;
+                config.scrollY += scrollAmount;
+                
+                // Scroll platforms and keys
+                for (const platform of config.platforms) {
+                    platform.y += scrollAmount;
+                }
+                for (const key of config.keys) {
+                    key.y += scrollAmount;
+                }
+                
+                // Score for ascending
+                score += Math.floor(scrollAmount / 10);
+                scoreEl.innerText = score;
+            }
+            
+            // Generate new platforms as needed
+            while (config.platforms[config.platforms.length - 1].y < config.scrollY + canvas.height) {
+                config.platforms.push({
+                    x: Math.random() * (canvas.width - 100),
+                    y: config.platforms[config.platforms.length - 1].y + 80 + Math.random() * 70,
+                    width: 80 + Math.random() * 70,
+                    height: 20,
+                    color: `hsl(${config.platforms.length * 30 % 360}, 70%, 50%)`
+                });
+            }
+            
+            // Generate new keys as needed
+            while (config.keys.length < 10) {
+                config.keys.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: config.scrollY + Math.random() * canvas.height + canvas.height,
+                    collected: false
+                });
+            }
+            
+            // Remove off-screen platforms and keys
+            config.platforms = config.platforms.filter(p => p.y < config.scrollY + canvas.height + 100);
+            config.keys = config.keys.filter(k => k.y < config.scrollY + canvas.height + 100 || !k.collected);
+            
+            // Check if player fell
+            if (config.player.y > config.scrollY + canvas.height) {
+                lives--;
+                livesEl.innerText = lives;
+                
+                if (lives <= 0) {
+                    gameOver();
+                    return;
+                }
+                
+                // Reset player position
+                config.player.y = config.scrollY + canvas.height / 2;
+                config.player.velocityY = 0;
+            }
+            
+            // Level increases with height
+            const newLevel = Math.floor(config.scrollY / 1000) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                levelEl.innerText = level;
+            }
+            
+            // Draw everything
+            // Draw platforms
+            for (const platform of config.platforms) {
+                ctx.fillStyle = platform.color;
+                ctx.fillRect(platform.x, platform.y - config.scrollY, platform.width, platform.height);
+                
+                // Platform top
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.fillRect(platform.x + 2, platform.y - config.scrollY + 2, platform.width - 4, 5);
+            }
+            
+            // Draw keys
+            for (const key of config.keys) {
+                if (key.collected) continue;
+                
+                ctx.fillStyle = '#00f3ff';
+                ctx.beginPath();
+                ctx.arc(key.x, key.y - config.scrollY, 10, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Key glow
+                ctx.shadowColor = '#00f3ff';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(key.x, key.y - config.scrollY, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            
+            // Draw player
+            ctx.fillStyle = config.player.onGround ? '#00ff88' : '#ff0066';
+            ctx.fillRect(config.player.x, config.player.y - config.scrollY, config.player.width, config.player.height);
+            
+            // Player details
+            ctx.fillStyle = '#000';
+            ctx.fillRect(config.player.x + 5, config.player.y - config.scrollY + 5, config.player.width - 10, 10);
+            
+            // Draw height/score
+            ctx.fillStyle = '#fff';
+            ctx.font = '16px monospace';
+            ctx.fillText(`HEIGHT: ${Math.floor(config.scrollY)}`, 20, 30);
+        }
+        
+        function jump() {
+            const config = gameConfigs.runner;
+            if (config.player.onGround) {
+                config.player.velocityY = config.jumpForce;
+                config.player.onGround = false;
+            }
+        }
+        
+        // ======================
+        // UTILITY FUNCTIONS
+        // ======================
+        function drawGrid() {
+            // Draw subtle grid in background
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.05)';
+            ctx.lineWidth = 1;
+            
+            // Vertical lines
+            for (let x = 0; x < canvas.width; x += 50) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y < canvas.height; y += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+        
+        function levelUp() {
+            level++;
+            levelEl.innerText = level;
+            
+            // Add extra life every 3 levels
+            if (level % 3 === 0) {
+                lives++;
+                livesEl.innerText = lives;
+            }
+            
+            // Restart current game at higher level
+            initGame(currentGame);
+        }
+        
+        function gameOver() {
+            gameActive = false;
+            clearInterval(gameTimer);
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('cybernexus_highScore', highScore);
+                document.getElementById('highScore').innerText = highScore;
+            }
+            
+            // Update player level based on total score
+            const totalScore = parseInt(localStorage.getItem('cybernexus_totalScore') || 0) + score;
+            localStorage.setItem('cybernexus_totalScore', totalScore);
+            
+            const newPlayerLevel = Math.floor(totalScore / 5000) + 1;
+            if (newPlayerLevel > playerLevel) {
+                playerLevel = newPlayerLevel;
+                localStorage.setItem('cybernexus_playerLevel', playerLevel);
+                document.getElementById('playerLevel').innerText = playerLevel;
+            }
+            
+            // Show game over message
+            alert(`GAME OVER\n\nSCORE: ${score}\nLEVEL REACHED: ${level}\n\nReturning to hub...`);
+            closeHub();
+        }
+        
+        function pauseGame() {
+            if (!gameActive) return;
+            
+            gamePaused = !gamePaused;
+            const pauseBtn = document.querySelector('.btn');
+            
+            if (gamePaused) {
+                pauseBtn.innerText = 'RESUME';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00f3ff';
+                ctx.font = '60px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width/2, canvas.height/2);
+                ctx.textAlign = 'left';
+            } else {
+                pauseBtn.innerText = 'PAUSE';
+            }
+        }
+        
+        function restartGame() {
+            if (!gameActive) return;
+            initGame(currentGame);
+        }
+        
+        function closeHub() {
+            gameActive = false;
+            clearInterval(gameTimer);
+            viewport.style.display = 'none';
+            document.getElementById('hub').style.display = 'grid';
+        }
+        
+        function showInstructions() {
+            if (currentGame && gameConfigs[currentGame]) {
+                modalGameTitle.innerText = `${gameConfigs[currentGame].title} - INSTRUCTIONS`;
+                modalInstructions.innerHTML = gameConfigs[currentGame].instructions;
+            } else {
+                modalGameTitle.innerText = "CYBER-NEXUS GAMING HUB";
+                modalInstructions.innerHTML = `
+                    <h3 style="color: #00f3ff; margin-bottom: 15px;">WELCOME TO CYBER-NEXUS</h3>
+                    <p>This is a collection of cyberpunk-themed mini-games. Each game tests different skills:</p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li><strong>ARCADE // AVOID</strong> - Reflexes and timing</li>
+                        <li><strong>LOGIC // SNAKE</strong> - Planning and spatial awareness</li>
+                        <li><strong>REFLEX // PADDLE</strong> - Precision and reaction time</li>
+                        <li><strong>CATCH // FRAGMENTS</strong> - Decision making under pressure</li>
+                        <li><strong>SURVIVE // PULSE</strong> - Focus and synchronization</li>
+                        <li><strong>MEMORY // SEQUENCE</strong> - Memory and pattern recognition</li>
+                        <li><strong>CYBER // INVADERS</strong> - Target tracking and accuracy</li>
+                        <li><strong>DATA // RUNNER</strong> - Timing and platform navigation</li>
+                    </ul>
+                    <p>Your progress is saved automatically. Try to beat your high scores and increase your Security Clearance level!</p>
+                    <p style="color: #ff00ff; margin-top: 20px; font-weight: bold;">SYSTEM READY. SELECT A MODULE TO BEGIN.</p>
+                `;
+            }
+            instructionsModal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            instructionsModal.style.display = 'none';
+        }
+        
+        function resetProgress() {
+            if (confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
+                localStorage.removeItem('cybernexus_totalGames');
+                localStorage.removeItem('cybernexus_highScore');
+                localStorage.removeItem('cybernexus_totalPlayTime');
+                localStorage.removeItem('cybernexus_playerLevel');
+                localStorage.removeItem('cybernexus_totalScore');
+                
+                totalGames = 0;
+                highScore = 0;
+                totalPlayTime = 0;
+                playerLevel = 1;
+                
+                document.getElementById('totalGames').innerText = totalGames;
+                document.getElementById('highScore').innerText = highScore;
+                document.getElementById('totalTime').innerText = formatTime(totalPlayTime);
+                document.getElementById('playerLevel').innerText = playerLevel;
+                
+                alert("Progress reset. Starting fresh!");
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === instructionsModal) {
+                closeModal();
+            }
+        });
+        
+        // Initialize with some random glitch effects occasionally
+        setInterval(() => {
+            if (Math.random() < 0.01) {
+                document.querySelector('.logo').classList.add('glitch');
+                setTimeout(() => {
+                    document.querySelector('.logo').classList.remove('glitch');
+                }, 500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
